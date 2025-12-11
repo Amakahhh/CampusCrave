@@ -220,6 +220,21 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Trending Cravings Section */}
+      <TrendingCravings />
+
+      {/* How It Works Section */}
+      <HowItWorks />
+
+      {/* Waiter CTA Section */}
+      <WaiterCTA />
+
+      {/* FAQ Section */}
+      <FAQSection />
+
+      {/* Footer Section */}
+      <Footer />
     </div>
   )
 }
