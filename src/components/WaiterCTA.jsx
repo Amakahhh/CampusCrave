@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Zap, TrendingUp } from 'lucide-react'
+import { Zap, TrendingUp, Clock, Wallet, CreditCard } from 'lucide-react'
 
 const WaiterCTA = () => {
   const [isHovered, setIsHovered] = useState(false)
@@ -19,7 +20,7 @@ const WaiterCTA = () => {
           className="relative group overflow-hidden rounded-3xl md:rounded-4xl shadow-2xl"
         >
           {/* Background - Gradient with Dynamic Elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-emerald-600 to-green-700"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-primary via-accent/90 to-primary"></div>
 
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 opacity-10">
@@ -41,7 +42,7 @@ const WaiterCTA = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="flex-1 text-center md:text-left"
+              className="flex-1 text-left md:text-left"
             >
               {/* Icon Badge */}
               <motion.div
@@ -74,9 +75,9 @@ const WaiterCTA = () => {
               {/* Benefits List */}
               <div className="space-y-3 mb-8 text-white font-sans">
                 {[
-                  { icon: '⚡', text: 'Flexible hours - work when you want' },
-                  { icon: '💰', text: 'Keep 80% of delivery earnings' },
-                  { icon: '📱', text: 'Get paid via Paystack instantly' },
+                  { Icon: Clock, text: 'Flexible hours - work when you want' },
+                  { Icon: Wallet, text: 'Keep 80% of delivery earnings' },
+                  { Icon: CreditCard, text: 'Get paid via Paystack weekly' },
                 ].map((benefit, index) => (
                   <motion.div
                     key={index}
@@ -86,7 +87,7 @@ const WaiterCTA = () => {
                     transition={{ delay: 0.3 + index * 0.1 }}
                     className="flex items-center gap-3 font-sans"
                   >
-                    <span className="text-2xl">{benefit.icon}</span>
+                    <benefit.Icon className="w-6 h-6 flex-shrink-0" />
                     <span className="text-lg font-medium">{benefit.text}</span>
                   </motion.div>
                 ))}
@@ -113,9 +114,9 @@ const WaiterCTA = () => {
                   transition={{ duration: 0.5 }}
                   className="absolute w-48 bg-white/20 backdrop-blur-md rounded-2xl p-6 border border-white/30 text-white shadow-2xl group-hover:shadow-xl"
                 >
-                  <div className="text-sm font-bold opacity-80 font-sans">EARNINGS THIS WEEK</div>
-                  <div className="text-4xl font-black mt-2 font-sans">₦12,400</div>
-                  <div className="text-xs opacity-70 mt-2 font-sans">32 deliveries completed</div>
+                  <div className="text-sm font-bold opacity-80 font-sans">YOUR FLEXIBILITY</div>
+                  <div className="text-4xl font-black mt-2 font-sans">100%</div>
+                  <div className="text-xs opacity-70 mt-2 font-sans">Choose your own schedule</div>
                 </motion.div>
 
                 {/* Card 2 */}
@@ -130,10 +131,10 @@ const WaiterCTA = () => {
                 >
                   <div className="text-sm font-bold opacity-90 font-sans flex items-center gap-2">
                     <TrendingUp className="w-4 h-4" />
-                    QUICK STATS
+                    YOUR EARNINGS
                   </div>
-                  <div className="text-3xl font-black mt-2 font-sans">4.9 ⭐</div>
-                  <div className="text-xs opacity-80 mt-2 font-sans">Rating (247 reviews)</div>
+                  <div className="text-3xl font-black mt-2 font-sans">Keep 80%</div>
+                  <div className="text-xs opacity-80 mt-2 font-sans">Of every delivery made</div>
                 </motion.div>
               </div>
             </motion.div>
@@ -148,24 +149,26 @@ const WaiterCTA = () => {
             className="relative z-10 px-8 md:px-16 pb-8 flex flex-col md:flex-row items-center gap-6"
           >
             {/* Main Button */}
-            <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)' }}
-              whileTap={{ scale: 0.95 }}
-              className="relative group/btn flex-1 md:flex-none px-16 py-5 bg-yellow-300 hover:bg-yellow-400 text-green-700 font-black text-lg rounded-2xl shadow-xl transition-all duration-300 font-sans overflow-hidden"
-            >
-              <span className="relative z-10">Start Earning</span>
-              <motion.div
-                animate={{ x: isHovered ? 10 : 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute right-6 top-1/2 -translate-y-1/2 text-2xl"
+            <Link to="/waiter/signup">
+              <motion.button
+                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)' }}
+                whileTap={{ scale: 0.95 }}
+                className="relative group/btn px-16 py-5 bg-yellow-300 hover:bg-yellow-400 text-primary font-black text-lg rounded-2xl shadow-xl transition-all duration-300 font-sans overflow-hidden border-2 border-yellow-300 flex items-center justify-center gap-4"
               >
-                →
-              </motion.div>
-            </motion.button>
+                <span className="relative z-10">Start Earning</span>
+                <motion.div
+                  animate={{ x: isHovered ? 5 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-2xl"
+                >
+                  →
+                </motion.div>
+              </motion.button>
+            </Link>
 
             {/* Secondary Info */}
             <div className="text-white text-sm font-sans text-center md:text-left">
-              <p className="opacity-90">Join <span className="font-bold">2,400+</span> waiters already earning on CampusCrave</p>
+              <p className="opacity-90">Deliver food, <span className="font-bold">earn money</span>, be your own boss</p>
             </div>
           </motion.div>
 

@@ -12,10 +12,10 @@ const Button = ({
   const baseStyles = 'px-8 h-14 rounded-full font-bold text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center'
   
   const variants = {
-    primary: 'bg-primary text-white hover:bg-[#6B1F2A] active:scale-95',
-    secondary: 'bg-background text-primary border-2 border-primary hover:bg-primary hover:text-white active:scale-95',
-    accent: 'bg-accent text-white hover:bg-[#4A1418] active:scale-95',
-    outline: 'bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white',
+    primary: 'bg-primary/20 backdrop-blur-lg border border-white/30 text-primary hover:bg-primary/30 active:scale-95 shadow-lg',
+    secondary: 'bg-white/20 backdrop-blur-lg border-2 border-white/30 text-white hover:bg-white/40 active:scale-95 shadow-lg',
+    accent: 'bg-accent/20 backdrop-blur-lg border border-white/30 text-accent hover:bg-accent/30 active:scale-95 shadow-lg',
+    outline: 'bg-white/10 backdrop-blur-lg border-2 border-white/30 text-white hover:bg-white/20 shadow-lg',
   }
 
   // If className contains !important overrides, don't apply variant styles

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, MapPin, CreditCard, Banknote, Home } from 'lucide-react'
 
 const FAQSection = () => {
   const [expandedIndex, setExpandedIndex] = useState(0)
@@ -9,38 +9,26 @@ const FAQSection = () => {
     {
       question: 'Do you deliver to all halls?',
       answer:
-        'Yes! We deliver to all residential halls on campus - both the main campus and the surrounding areas. Our delivery network covers every hostel and residential area. You can enter your hostel location when placing an order to confirm delivery.',
-      icon: '📍',
+        'Yes! We deliver straight to your room in all residential halls on campus. Just enter your hall and room number when placing your order, and we\'ll bring your food right to your door.',
+      Icon: MapPin,
     },
     {
       question: 'How do I pay?',
       answer:
-        'We accept multiple payment methods for your convenience: Paystack (debit/credit cards), bank transfer, or cash on delivery. When you check out, you\'ll see all available options for your area. All payments are processed securely.',
-      icon: '💳',
+        'We accept Paystack (debit/credit cards) and bank transfer. All payments are processed securely through our app. No cash on delivery.',
+      Icon: CreditCard,
     },
     {
-      question: 'Is there a service fee?',
+      question: 'What is the delivery fee?',
       answer:
-        'Simple! Our service is transparent. There\'s a flat ₦20 service fee to support our platform, plus ₦500 for delivery. No hidden charges, no surprise fees. What you see at checkout is what you pay.',
-      icon: '💰',
+        'Our delivery fee is flat ₦500. No hidden charges, no surprises. What you see at checkout is what you pay.',
+      Icon: Banknote,
     },
     {
-      question: 'What if my food arrives late?',
+      question: 'Where will I receive my food?',
       answer:
-        'We guarantee delivery within your estimated window. If your order is late, contact us immediately via the app and we\'ll resolve it - whether that\'s a refund, replacement, or credit for your next order. Your satisfaction is our priority.',
-      icon: '⚡',
-    },
-    {
-      question: 'Can I schedule orders in advance?',
-      answer:
-        'Absolutely! You can schedule orders up to 7 days in advance. Just select your preferred delivery time when placing the order. This is perfect for meal prep or ensuring you have food ready when you need it.',
-      icon: '🗓️',
-    },
-    {
-      question: 'What\'s your refund policy?',
-      answer:
-        'If you\'re not satisfied with your order, let us know within 30 minutes of delivery. We offer full refunds or meal replacements. We stand behind every order and want you to be completely happy with what you receive.',
-      icon: '↩️',
+        'Your food will be delivered right to your room door. Our waiter will call or knock when they arrive so you can receive your order.',
+      Icon: Home,
     },
   ]
 
@@ -49,11 +37,11 @@ const FAQSection = () => {
   }
 
   return (
-    <section className="relative z-10 py-32 px-6 bg-gradient-to-b from-yellow-50/50 to-white overflow-hidden">
+    <section className="relative z-10 py-32 px-6 bg-gradient-to-b from-gray-100/50 to-white overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute top-0 left-0 w-full h-full -z-10">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-green-100/30 rounded-full blur-3xl opacity-40"></div>
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-yellow-100/20 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-40"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-gray-300/20 rounded-full blur-3xl opacity-30"></div>
       </div>
 
       <div className="max-w-4xl mx-auto">
@@ -65,7 +53,7 @@ const FAQSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4 font-sans">
-            Frequently Asked <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Questions</span>
+            Frequently Asked <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Questions</span>
           </h2>
           <p className="text-lg text-gray-600 font-sans">
             Everything you need to know about ordering from CampusCrave.
@@ -88,14 +76,14 @@ const FAQSection = () => {
                 className="w-full relative"
                 whileHover={{ scale: 1.01 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
 
-                <div className="relative px-6 md:px-8 py-6 bg-white rounded-2xl border border-gray-100 group-hover:border-green-200 transition-all duration-300 hover:shadow-lg">
+                <div className="relative px-6 md:px-8 py-6 bg-white/40 backdrop-blur-lg rounded-2xl border border-white/40 group-hover:border-white/60 transition-all duration-300 hover:shadow-lg">
                   <div className="flex items-center justify-between gap-4">
                     {/* Left - Icon and Question */}
                     <div className="flex items-center gap-4 text-left flex-1">
-                      <span className="text-3xl md:text-4xl flex-shrink-0">{faq.icon}</span>
-                      <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors font-sans">
+                      <faq.Icon className="w-6 h-6 text-primary flex-shrink-0" />
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-primary transition-colors font-sans">
                         {faq.question}
                       </h3>
                     </div>
@@ -106,7 +94,7 @@ const FAQSection = () => {
                       transition={{ duration: 0.3 }}
                       className="flex-shrink-0"
                     >
-                      <ChevronDown className="w-6 h-6 text-green-600 group-hover:scale-110 transition-transform" />
+                      <ChevronDown className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
                     </motion.div>
                   </div>
                 </div>
@@ -122,7 +110,7 @@ const FAQSection = () => {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 md:px-8 py-6 bg-gradient-to-br from-green-50/50 to-emerald-50/30 rounded-2xl border border-green-100/50 border-t-green-200">
+                    <div className="px-6 md:px-8 py-6 bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl border border-white/30">
                       <motion.p
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -132,18 +120,6 @@ const FAQSection = () => {
                       >
                         {faq.answer}
                       </motion.p>
-
-                      {/* Additional Info Badge */}
-                      {index === 2 && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 }}
-                          className="mt-4 inline-block bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm font-bold font-sans"
-                        >
-                          💚 That's it! No hidden charges.
-                        </motion.div>
-                      )}
                     </div>
                   </motion.div>
                 )}
@@ -163,7 +139,7 @@ const FAQSection = () => {
           <p className="text-gray-600 mb-6 text-lg font-sans">
             Still have questions? We're here to help!
           </p>
-          <button className="inline-block px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 active:scale-95 font-sans">
+          <button className="inline-block px-8 py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 active:scale-95 font-sans border border-white/30">
             Contact Support
           </button>
         </motion.div>

@@ -45,11 +45,12 @@ const RotatingTypewriter = ({ messages, speed = 50, delayBetweenMessages = 3000 
 
   return (
     <span className="inline-block">
-      {displayedText}
+      <span>{displayedText}</span>
+      {/* Realistic blinking cursor - follows text naturally */}
       <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity }}
-        className="inline-block w-0.5 h-full bg-gray-900 ml-1"
+        animate={{ opacity: [1, 1, 0, 0] }}
+        transition={{ duration: 1, repeat: Infinity }}
+        className="inline-block w-0.5 h-8 md:h-12 bg-gray-900 ml-0.5 align-baseline"
       />
     </span>
   )

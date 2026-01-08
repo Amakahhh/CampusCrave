@@ -22,10 +22,10 @@ const Input = ({
         value={value}
         onChange={onChange}
         className={`
-          w-full px-5 py-4 rounded-2xl border-2 border-text/20
-          focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
+          w-full px-5 py-4 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/30
+          focus:border-white/60 focus:outline-none focus:ring-2 focus:ring-white/30
           transition-all duration-200 text-base font-medium
-          bg-white text-text
+          text-white placeholder-white/60 shadow-lg
           ${className}
         `}
         {...props}

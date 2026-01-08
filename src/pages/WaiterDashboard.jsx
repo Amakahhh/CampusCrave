@@ -5,33 +5,87 @@ import { Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import Card from '../components/Card'
 import Button from '../components/Button'
+import apiClient from '../api/apiClient'
+import { useEffect } from 'react'
 
 const WaiterDashboard = () => {
-  const [isOnline, setIsOnline] = useState(false)
-  const [earnings, setEarnings] = useState(0)
+  const [isOnline, setIsOnline] = useState(localStorage.getItem('waiterStatus') === 'online')
+  const [wallet, setWallet] = useState({ balance: 0 })
   const [activeOrder, setActiveOrder] = useState(null)
-  const [availableOrders, setAvailableOrders] = useState([
-    { id: 1, vendor: 'Mama Titi\'s Kitchen', hall: 'Hall 3', orderId: 'ORD001' },
-    { id: 2, vendor: 'Uncle B\'s Grill', hall: 'Hall 1', orderId: 'ORD002' },
-    { id: 3, vendor: 'Campus Delight', hall: 'Hall 5', orderId: 'ORD003' },
-  ])
+  const [availableOrders, setAvailableOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [walletRes, activeRes, availableRes] = await Promise.all([
+          apiClient.get('/waiters/wallet'),
+          apiClient.get('/orders/waiter/active'),
+          apiClient.get('/orders/available')
+        ])
+        setWallet(walletRes.data)
+        setActiveOrder(activeRes.data?.[0] || null)
+        setAvailableOrders(availableRes.data)
+        setError('')
+      } catch (err) {
+        console.error('Failed to fetch dashboard data:', err)
+        setError('Failed to sync. Please refresh.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+    const interval = setInterval(fetchData, 10000) // Poll every 10s
+
+    return () => clearInterval(interval)
+  }, [])
 
   const handleToggleOnline = () => {
-    setIsOnline(!isOnline)
+    const newStatus = !isOnline
+    setIsOnline(newStatus)
+    localStorage.setItem('waiterStatus', newStatus ? 'online' : 'offline')
   }
 
-  const handleClaimOrder = (order) => {
-    setActiveOrder(order)
-    setAvailableOrders(prev => prev.filter(o => o.id !== order.id))
+  const handleClaimOrder = async (orderId) => {
+    try {
+      setLoading(true)
+      await apiClient.post(`/orders/${orderId}/claim`)
+      // Re-fetch to update state
+      const [walletRes, activeRes, availableRes] = await Promise.all([
+        apiClient.get('/waiters/wallet'),
+        apiClient.get('/orders/waiter/active'),
+        apiClient.get('/orders/available')
+      ])
+      setWallet(walletRes.data)
+      setActiveOrder(activeRes.data?.[0] || null)
+      setAvailableOrders(availableRes.data)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to claim order')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleMarkCollected = () => {
-    setActiveOrder(prev => ({ ...prev, status: 'collected' }))
-  }
-
-  const handleMarkDelivered = () => {
-    setEarnings(prev => prev + 400)
-    setActiveOrder(null)
+  const handleUpdateStatus = async (orderId, status) => {
+    try {
+      setLoading(true)
+      await apiClient.post(`/orders/${orderId}/status`, { status })
+      // Re-fetch to update state
+      const [walletRes, activeRes, availableRes] = await Promise.all([
+        apiClient.get('/waiters/wallet'),
+        apiClient.get('/orders/waiter/active'),
+        apiClient.get('/orders/available')
+      ])
+      setWallet(walletRes.data)
+      setActiveOrder(activeRes.data?.[0] || null)
+      setAvailableOrders(availableRes.data)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update status')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -52,6 +106,9 @@ const WaiterDashboard = () => {
           </div>
         </div>
       </header>
+
+      {/* Status Message */}
+      {error && <p className="px-6 pb-4 text-red-500 text-sm font-medium text-center">{error}</p>}
 
       {/* Online Toggle */}
       <section className="px-6 py-6">
@@ -82,7 +139,7 @@ const WaiterDashboard = () => {
         </Card>
       </section>
 
-      {/* Earnings Card */}
+      {/* Wallet Card */}
       <section className="px-6 mb-6">
         <Card className="bg-gradient-to-br from-primary/10 to-accent/10">
           <div className="flex items-center gap-4">
@@ -90,15 +147,16 @@ const WaiterDashboard = () => {
               <DollarSign className="w-6 h-6 text-white" />
             </div>
             <div>
-              <p className="text-sm text-text/70 mb-1 font-semibold">Today's Earnings</p>
+              <p className="text-sm text-text/70 mb-1 font-semibold">Wallet Balance</p>
               <motion.p
-                key={earnings}
+                key={wallet.balance}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
                 className="text-3xl font-extrabold tracking-tight text-text"
               >
-                ₦{earnings.toLocaleString()}
+                ₦{wallet.balance.toLocaleString()}
               </motion.p>
+              <p className="text-xs text-text/50 font-medium">Earned today</p>
             </div>
           </div>
         </Card>
@@ -115,36 +173,49 @@ const WaiterDashboard = () => {
           >
             <Card className="border-2 border-primary">
               <h3 className="font-extrabold tracking-tight text-text mb-4 text-xl">
-                Active Order: {activeOrder.orderId}
+                Active Order: {activeOrder.id.slice(-6).toUpperCase()}
               </h3>
               <div className="space-y-3 mb-6 text-base">
                 <div className="flex justify-between">
                   <span className="text-text/70 font-semibold">Vendor</span>
-                  <span className="font-extrabold text-text">{activeOrder.vendor}</span>
+                  <span className="font-extrabold text-text">{activeOrder.vendor.name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-text/70 font-semibold">Delivery Hall</span>
-                  <span className="font-extrabold text-text">{activeOrder.hall}</span>
+                  <span className="font-extrabold text-text">{activeOrder.deliveryAddress.hall}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-text/70 font-semibold">Earnings</span>
-                  <span className="font-extrabold text-primary text-lg">₦400</span>
+                  <span className="text-text/70 font-semibold">Status</span>
+                  <span className="font-extrabold text-primary">{activeOrder.status}</span>
                 </div>
               </div>
               <div className="space-y-3">
-                {activeOrder.status !== 'collected' ? (
+                {activeOrder.status === 'ASSIGNED' && (
                   <Button
                     variant="primary"
                     className="w-full"
-                    onClick={handleMarkCollected}
+                    onClick={() => handleUpdateStatus(activeOrder.id, 'COLLECTED')}
+                    disabled={loading}
                   >
                     Mark as Collected
                   </Button>
-                ) : (
+                )}
+                {activeOrder.status === 'COLLECTED' && (
+                  <Button
+                    variant="primary"
+                    className="w-full"
+                    onClick={() => handleUpdateStatus(activeOrder.id, 'DELIVERING')}
+                    disabled={loading}
+                  >
+                    Start Delivery
+                  </Button>
+                )}
+                {activeOrder.status === 'DELIVERING' && (
                   <Button
                     variant="accent"
                     className="w-full"
-                    onClick={handleMarkDelivered}
+                    onClick={() => handleUpdateStatus(activeOrder.id, 'DELIVERED')}
+                    disabled={loading}
                   >
                     Mark as Delivered
                   </Button>
@@ -177,23 +248,23 @@ const WaiterDashboard = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h4 className="font-extrabold tracking-tight text-text mb-1 text-lg">
-                        {order.vendor}
+                        {order.vendor.name}
                       </h4>
                       <p className="text-sm text-text/70 font-medium">
-                        Delivery to {order.hall}
+                        Delivery to {order.deliveryAddress.hall}
                       </p>
                       <p className="text-xs text-text/60 mt-1 font-semibold">
-                        Order ID: {order.orderId}
+                        Order ID: {order.id.slice(-6).toUpperCase()}
                       </p>
                     </div>
                   </div>
                   <Button
                     variant="primary"
                     className="w-full"
-                    onClick={() => handleClaimOrder(order)}
-                    disabled={!isOnline}
+                    onClick={() => handleClaimOrder(order.id)}
+                    disabled={!isOnline || loading}
                   >
-                    Claim Order
+                    {loading ? 'Claiming...' : 'Claim Order'}
                   </Button>
                 </Card>
               </motion.div>

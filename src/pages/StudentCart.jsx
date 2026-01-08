@@ -7,41 +7,41 @@ import Logo from '../components/Logo'
 import Card from '../components/Card'
 import Button from '../components/Button'
 
+import { useCart } from '../context/CartContext'
+import apiClient from '../api/apiClient'
+
 const StudentCart = () => {
   const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: 'Jollof Rice & Chicken', price: 1500, quantity: 2 },
-    { id: 2, name: 'Fried Rice & Beef', price: 1800, quantity: 1 },
-    { id: 3, name: 'Pounded Yam & Egusi', price: 2000, quantity: 1 },
-  ])
+  const { cartItems, removeFromCart, updateQuantity, subtotal, deliveryFee, serviceFee, total } = useCart()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const deliveryFee = 500
-  const serviceFee = 20
-
-  const updateQuantity = (id, change) => {
-    setCartItems(items =>
-      items.map(item => {
-        if (item.id === id) {
-          const newQuantity = item.quantity + change
-          if (newQuantity <= 0) return null
-          return { ...item, quantity: newQuantity }
+  const handleCheckout = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const orderData = {
+        vendorId: cartItems[0].vendorId,
+        items: cartItems.map(item => ({
+          menuItemId: item.foodId,
+          quantity: item.quantity
+        })),
+        deliveryAddress: {
+          hall: 'Your Hall', // Should be from user profile or prompted
+          room: 'Your Room'
         }
-        return item
-      }).filter(Boolean)
-    )
-  }
+      }
 
-  const removeItem = (id) => {
-    setCartItems(items => items.filter(item => item.id !== id))
-  }
+      const response = await apiClient.post('/orders', orderData)
+      const { paymentUrl } = response.data
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const total = subtotal + deliveryFee + serviceFee
-
-  const handleCheckout = () => {
-    // In a real app, this would integrate with Paystack
-    const orderId = Math.floor(Math.random() * 1000000)
-    navigate(`/student/order/${orderId}`)
+      // Redirect to Paystack payment URL
+      window.location.href = paymentUrl
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to initiate checkout. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -95,7 +95,7 @@ const StudentCart = () => {
                       <div className="flex items-center gap-3">
                         <div className="flex items-center gap-2 bg-background rounded-full px-2 py-1 border-2 border-text/20">
                           <button
-                            onClick={() => updateQuantity(item.id, -1)}
+                            onClick={() => updateQuantity(item.foodId, item.quantity - 1)}
                             className="p-1 hover:bg-accent/10 rounded-full transition-colors"
                           >
                             <Minus className="w-4 h-4 text-text" />
@@ -104,14 +104,14 @@ const StudentCart = () => {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.id, 1)}
+                            onClick={() => updateQuantity(item.foodId, item.quantity + 1)}
                             className="p-1 hover:bg-accent/10 rounded-full transition-colors"
                           >
                             <Plus className="w-4 h-4 text-text" />
                           </button>
                         </div>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeFromCart(item.foodId)}
                           className="p-2 hover:bg-red-50 rounded-full transition-colors"
                         >
                           <Trash2 className="w-4 h-4 text-red-500" />
@@ -164,12 +164,14 @@ const StudentCart = () => {
             animate={{ y: 0 }}
             className="fixed bottom-24 left-0 right-0 px-6 z-40"
           >
+            {error && <p className="text-red-500 text-sm mb-4 font-medium text-center">{error}</p>}
             <Button
               variant="primary"
               className="w-full shadow-2xl"
               onClick={handleCheckout}
+              disabled={loading}
             >
-              Pay ₦{total.toLocaleString()} with Paystack
+              {loading ? 'Processing...' : `Pay ₦${total.toLocaleString()} with Paystack`}
             </Button>
           </motion.div>
         )}

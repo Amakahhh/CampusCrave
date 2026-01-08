@@ -9,45 +9,32 @@ import Button from '../components/Button'
 import FloatingNav from '../components/FloatingNav'
 import Badge from '../components/Badge'
 import Typewriter from '../components/Typewriter'
+import apiClient from '../api/apiClient'
+import { useEffect } from 'react'
+import { useCart } from '../context/CartContext'
 
 const StudentDashboard = () => {
   const navigate = useNavigate()
-  const [cartCount, setCartCount] = useState(0)
-  const [cartAnimation, setCartAnimation] = useState(false)
+  const { cartItems } = useCart()
+  const [vendors, setVendors] = useState([])
+  const [loading, setLoading] = useState(true)
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const cartCount = cartItems.length
 
-  // Mock vendor data
-  const vendors = [
-    {
-      id: 1,
-      name: 'Mama Titi\'s Kitchen',
-      rating: 4.8,
-      image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop',
-    },
-    {
-      id: 2,
-      name: 'Uncle B\'s Grill',
-      rating: 4.6,
-      image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop',
-    },
-    {
-      id: 3,
-      name: 'Campus Delight',
-      rating: 4.9,
-      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop',
-    },
-    {
-      id: 4,
-      name: 'Spice Route',
-      rating: 4.7,
-      image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop',
-    },
-  ]
-
-  const handleAddToCart = () => {
-    setCartCount(prev => prev + 1)
-    setCartAnimation(true)
-    setTimeout(() => setCartAnimation(false), 600)
-  }
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        setLoading(true)
+        const response = await apiClient.get('/vendors')
+        setVendors(response.data)
+      } catch (err) {
+        console.error('Failed to fetch vendors:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchVendors()
+  }, [])
 
   const getGreeting = () => {
     const hour = new Date().getHours()
@@ -74,8 +61,8 @@ const StudentDashboard = () => {
           </div>
           <Link to="/student/cart" className="relative">
             <motion.div
-              animate={cartAnimation ? { scale: [1, 1.3, 1], rotate: [0, -10, 10, 0] } : {}}
-              transition={{ duration: 0.6 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               <ShoppingCart className="w-6 h-6 text-text" />
               {cartCount > 0 && (
@@ -100,7 +87,7 @@ const StudentDashboard = () => {
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-3xl font-extrabold tracking-tight text-text mb-2">
-            {getGreeting()}, John 👋
+            {getGreeting()}, {user.name?.split(' ')[0] || 'Student'} 👋
           </h1>
           <p className="text-text/70 text-lg">
             <Typewriter text="What are you craving today?" speed={50} />
@@ -121,7 +108,7 @@ const StudentDashboard = () => {
               key={vendor.id}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ 
+              transition={{
                 delay: 0.3 + index * 0.1,
                 type: 'spring',
                 stiffness: 200,
@@ -129,18 +116,22 @@ const StudentDashboard = () => {
               }}
             >
               <Card
-                onClick={() => navigate(`/student/vendor/${vendor.id}`)}
+                onClick={() => navigate(`/student/order?vendorId=${vendor.id}`)}
                 hover
                 className="p-0 overflow-hidden cursor-pointer"
               >
-                <div className="relative h-40 bg-gray-200 overflow-hidden rounded-t-[32px]">
-                  <motion.img
-                    src={vendor.image}
-                    alt={vendor.name}
-                    className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                  />
+                <div className="relative h-40 bg-gray-200 overflow-hidden rounded-t-[32px] flex items-center justify-center">
+                  {vendor.imageUrl ? (
+                    <motion.img
+                      src={vendor.imageUrl}
+                      alt={vendor.name}
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  ) : (
+                    <span className="text-4xl text-gray-300 font-bold">{vendor.name.charAt(0)}</span>
+                  )}
                   {index === 0 && (
                     <div className="absolute top-3 right-3">
                       <Badge>NEW</Badge>
@@ -153,7 +144,7 @@ const StudentDashboard = () => {
                   </h3>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 fill-secondary text-secondary" />
-                    <span className="text-sm font-bold text-text">{vendor.rating}</span>
+                    <span className="text-sm font-bold text-text">4.5</span>
                   </div>
                 </div>
               </Card>

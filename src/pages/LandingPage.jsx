@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Menu } from 'lucide-react'
+import { Menu, Zap, DollarSign, Star } from 'lucide-react'
 import Logo from '../components/Logo'
 import Button from '../components/Button'
 import FoodBackground from '../components/FoodBackground'
@@ -13,6 +13,7 @@ import FAQSection from '../components/FAQSection'
 import Footer from '../components/Footer'
 
 const LandingPage = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const wittyMessages = [
     "Too busy to get your food? We got you.",
     "Need to focus on other things? No worries.",
@@ -25,7 +26,7 @@ const LandingPage = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-yellow-50 relative overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 relative overflow-x-hidden">
       {/* Food-themed Animated Background */}
       <FoodBackground />
 
@@ -59,35 +60,94 @@ const LandingPage = () => {
             >
               FAQ
             </a>
-            <a
-              href="#waiters"
+            <Link
+              to="/waiter/signup"
               className="px-4 py-2 rounded-full hover:bg-white/20 transition-colors text-sm font-semibold text-gray-800 font-nunito"
             >
               Mobile Waiters
-            </a>
+            </Link>
           </div>
 
           {/* Right - Auth Buttons Container */}
           <div className="flex items-center bg-white/20 backdrop-blur-lg rounded-full px-4 py-3 shadow-lg border border-white/30 gap-2 ml-auto">
             <Link
-              to="/waiter/signup"
+              to="/student/signup"
               className="px-4 py-2 rounded-full hover:bg-white/20 transition-colors text-sm font-semibold text-gray-800 font-nunito"
             >
-              Sign In
+              Sign Up
             </Link>
             <Link
               to="/student/login"
-              className="px-4 py-2 rounded-full bg-green-600 hover:bg-green-700 text-white transition-colors text-sm font-semibold"
+              className="px-4 py-2 rounded-full bg-primary hover:bg-accent text-white transition-colors text-sm font-semibold"
             >
               Log In
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden bg-white/20 backdrop-blur-lg rounded-full px-4 py-3 shadow-lg border border-white/30 ml-auto">
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden bg-white/20 backdrop-blur-lg rounded-full px-4 py-3 shadow-lg border border-white/30 ml-auto hover:bg-white/30 transition-colors"
+          >
             <Menu className="w-5 h-5 text-gray-800" />
           </button>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden bg-white/95 backdrop-blur-lg rounded-3xl shadow-xl border border-white/30 p-6 mt-2 mx-auto w-[95%] max-w-6xl z-40"
+          >
+            <div className="flex flex-col gap-4">
+              <Link
+                to="/student/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-full hover:bg-primary/10 transition-colors text-sm font-semibold text-gray-800 font-nunito"
+              >
+                Order
+              </Link>
+              <a
+                href="#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-full hover:bg-primary/10 transition-colors text-sm font-semibold text-gray-800 font-nunito"
+              >
+                About Us
+              </a>
+              <a
+                href="#faq"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-full hover:bg-primary/10 transition-colors text-sm font-semibold text-gray-800 font-nunito"
+              >
+                FAQ
+              </a>
+              <Link
+                to="/waiter/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-full hover:bg-primary/10 transition-colors text-sm font-semibold text-gray-800 font-nunito"
+              >
+                Mobile Waiters
+              </Link>
+              <hr className="my-2 border-gray-200" />
+              <Link
+                to="/student/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-full hover:bg-primary/10 transition-colors text-sm font-semibold text-gray-800 font-nunito"
+              >
+                Sign Up
+              </Link>
+              <Link
+                to="/student/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-full bg-primary hover:bg-accent text-white transition-colors text-sm font-semibold text-center"
+              >
+                Log In
+              </Link>
+            </div>
+          </motion.div>
+        )}
       </nav>
 
       {/* Hero Section - Longer and Higher */}
@@ -131,14 +191,14 @@ const LandingPage = () => {
           >
             <Link to="/student/login">
               <Button
-                className="!bg-green-600 hover:!bg-green-700 !text-white px-12 py-6 text-lg font-bold shadow-lg hover:shadow-xl border-0"
+                className="!bg-primary hover:!bg-accent !text-white px-12 py-6 text-lg font-bold shadow-lg hover:shadow-xl border-0"
               >
                 Order Food
               </Button>
             </Link>
             <Link to="/waiter/signup">
               <Button
-                className="!bg-white hover:!bg-green-600 !text-green-600 border-2 !border-green-600 hover:!border-green-700 hover:!text-white px-12 py-6 text-lg font-bold shadow-lg hover:shadow-xl"
+                className="!bg-white hover:!bg-primary !text-primary border-2 !border-primary hover:!border-accent hover:!text-white px-12 py-6 text-lg font-bold shadow-lg hover:shadow-xl"
               >
                 Become a Waiter
               </Button>
@@ -158,18 +218,18 @@ const LandingPage = () => {
             {[
               {
                 title: 'Fast Delivery',
-                description: 'Get your food delivered in 30-45 minutes',
-                icon: '🚀',
+                description: 'Get your food delivered in no time',
+                icon: Zap,
               },
               {
                 title: 'Affordable Prices',
-                description: 'Flat ₦500 delivery fee, no hidden charges',
-                icon: '💰',
+                description: 'Flat ₦500 delivery fee',
+                icon: DollarSign,
               },
               {
                 title: 'Fresh & Tasty',
                 description: 'Only the best from trusted campus vendors',
-                icon: '🍕',
+                icon: Star,
               },
             ].map((feature, index) => (
               <motion.div
@@ -180,7 +240,9 @@ const LandingPage = () => {
                 transition={{ delay: index * 0.2 }}
                 className="text-center p-6 bg-white rounded-2xl shadow-md"
               >
-                <div className="text-5xl mb-4">{feature.icon}</div>
+                <div className="flex justify-center mb-4">
+                  <feature.icon className="w-12 h-12 text-primary" />
+                </div>
                 <h3 className="text-xl font-heading font-bold text-gray-900 mb-2">
                   {feature.title}
                 </h3>
@@ -192,7 +254,7 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 bg-gradient-to-r from-green-600 to-green-700 text-white py-20 px-6">
+      <section className="relative z-10 bg-gradient-to-r from-primary to-accent text-white py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-heading font-bold mb-6">
             Ready to satisfy your cravings?
@@ -203,16 +265,14 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/student/login">
               <Button
-                variant="primary"
-                className="bg-white text-green-600 hover:bg-gray-100 px-10 py-5 text-lg font-bold"
+                className="!bg-white !text-primary hover:!bg-primary hover:!text-white px-10 py-5 text-lg font-bold shadow-lg transition-all"
               >
                 Start Ordering
               </Button>
             </Link>
             <Link to="/waiter/signup">
               <Button
-                variant="secondary"
-                className="border-2 border-white text-white hover:bg-white hover:text-green-600 px-10 py-5 text-lg font-bold"
+                className="!bg-white/20 !backdrop-blur-sm !border-2 !border-white !text-white hover:!bg-white hover:!text-primary px-10 py-5 text-lg font-bold shadow-lg transition-all"
               >
                 Join as Waiter
               </Button>

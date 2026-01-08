@@ -56,10 +56,10 @@ const TrendingCravings = () => {
   }
 
   return (
-    <section className="relative z-10 py-24 px-6 bg-gradient-to-b from-white to-yellow-50/50 overflow-hidden">
+    <section className="relative z-10 py-24 px-6 bg-gradient-to-b from-white to-gray-100/50 overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-200/20 rounded-full blur-3xl -z-10 opacity-40"></div>
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-green-200/20 rounded-full blur-3xl -z-10 opacity-30"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10 opacity-40"></div>
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-gray-200/20 rounded-full blur-3xl -z-10 opacity-30"></div>
 
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
@@ -70,7 +70,7 @@ const TrendingCravings = () => {
           className="mb-16"
         >
           <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4 font-sans">
-            Trending <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Cravings</span>
+            Trending <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Cravings</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl font-sans">
             Discover what's hot on campus right now. Fresh food from your favorite vendors, delivered in minutes.
@@ -82,14 +82,14 @@ const TrendingCravings = () => {
           {/* Scroll Buttons - Hidden on mobile, visible on md+ */}
           <button
             onClick={() => scroll('left')}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-20 w-14 h-14 bg-white rounded-full shadow-lg hover:shadow-xl items-center justify-center text-gray-900 hover:bg-green-50 transition-all duration-300 group-hover:opacity-100 opacity-0 hover:scale-110 border border-gray-100"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 z-20 w-14 h-14 bg-white/20 backdrop-blur-lg rounded-full shadow-lg hover:shadow-xl items-center justify-center text-primary hover:bg-white/30 transition-all duration-300 group-hover:opacity-100 opacity-0 hover:scale-110 border border-white/30"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
 
           <button
             onClick={() => scroll('right')}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-20 w-14 h-14 bg-white rounded-full shadow-lg hover:shadow-xl items-center justify-center text-gray-900 hover:bg-green-50 transition-all duration-300 group-hover:opacity-100 opacity-0 hover:scale-110 border border-gray-100"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 z-20 w-14 h-14 bg-white/20 backdrop-blur-lg rounded-full shadow-lg hover:shadow-xl items-center justify-center text-primary hover:bg-white/30 transition-all duration-300 group-hover:opacity-100 opacity-0 hover:scale-110 border border-white/30"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -112,12 +112,6 @@ const TrendingCravings = () => {
                   {/* Top Image Section (60%) */}
                   <div className="relative h-48 bg-gradient-to-br from-yellow-100 to-orange-100 overflow-hidden flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                     <span className="text-8xl drop-shadow-lg">{vendor.image}</span>
-
-                    {/* Badge - Open Now */}
-                    <div className="absolute top-4 right-4 bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2 group-hover:scale-110 transition-transform">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                      Open Now
-                    </div>
                   </div>
 
                   {/* Content Section (40%) */}
@@ -129,35 +123,18 @@ const TrendingCravings = () => {
                       </h3>
                       <p className="text-sm text-gray-500 mb-3 font-sans">{vendor.cuisine}</p>
 
-                      {/* Rating */}
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                            />
-                          ))}
-                        </div>
-                        <span className="text-sm font-bold text-gray-800 font-sans">
-                          {vendor.rating}
-                        </span>
-                        <span className="text-xs text-gray-500 font-sans">
-                          ({vendor.reviews})
-                        </span>
-                      </div>
                     </div>
 
                     {/* Price Section */}
                     <div className="pt-4 border-t border-gray-100">
                       <div className="flex items-baseline gap-2">
                         <span className="text-sm text-gray-600 font-sans">Avg Order:</span>
-                        <span className="text-2xl font-bold text-green-600 font-sans">₦{vendor.avgPrice}</span>
+                        <span className="text-2xl font-bold text-primary font-sans">₦{vendor.avgPrice}</span>
                       </div>
                     </div>
 
                     {/* CTA Button */}
-                    <button className="mt-4 w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:from-green-600 hover:to-emerald-700 active:scale-95 group-hover:scale-105 origin-bottom font-sans">
+                    <button className="mt-4 w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:from-accent hover:to-primary active:scale-95 group-hover:scale-105 origin-bottom font-sans border-2 border-primary sketch-border">
                       Order Now
                     </button>
                   </div>

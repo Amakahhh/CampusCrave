@@ -9,7 +9,7 @@ const Footer = () => {
     {
       category: 'Platform',
       items: [
-        { label: 'Order Food', href: '/student/login' },
+        { label: 'Order Food', href: '/student/dashboard' },
         { label: 'Become a Waiter', href: '/waiter/signup' },
         { label: 'How It Works', href: '#howitworks' },
         { label: 'For Vendors', href: '#vendors' },
@@ -19,18 +19,18 @@ const Footer = () => {
       category: 'Company',
       items: [
         { label: 'About Us', href: '#about' },
-        { label: 'Blog', href: '#blog' },
-        { label: 'Careers', href: '#careers' },
-        { label: 'Contact', href: '#contact' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'Careers', href: '/careers' },
+        { label: 'Contact', href: '/contact' },
       ],
     },
     {
       category: 'Legal',
       items: [
-        { label: 'Privacy Policy', href: '#privacy' },
-        { label: 'Terms of Service', href: '#terms' },
-        { label: 'Cookie Policy', href: '#cookies' },
-        { label: 'Safety', href: '#safety' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Terms of Service', href: '/terms' },
+        { label: 'Cookie Policy', href: '/cookies' },
+        { label: 'Safety', href: '/safety' },
       ],
     },
   ]
@@ -45,8 +45,8 @@ const Footer = () => {
     <footer className="relative z-10 bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-green-50 rounded-full blur-3xl opacity-40"></div>
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-yellow-50 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-40"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-gray-200/20 rounded-full blur-3xl opacity-30"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-20">
@@ -78,7 +78,7 @@ const Footer = () => {
                     href={social.href}
                     whileHover={{ scale: 1.2, y: -4 }}
                     whileTap={{ scale: 0.95 }}
-                    className={`w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 transition-all duration-300 hover:bg-green-100 ${social.color} group`}
+                    className={`w-10 h-10 rounded-full bg-white/20 backdrop-blur-lg flex items-center justify-center text-gray-700 transition-all duration-300 hover:bg-primary/30 border border-white/30 hover:border-white/50 ${social.color} group`}
                     title={social.label}
                   >
                     <Icon className="w-5 h-5" />
@@ -105,11 +105,11 @@ const Footer = () => {
                   <li key={item.label}>
                     <a
                       href={item.href}
-                      className="text-gray-600 hover:text-green-600 transition-colors duration-300 text-sm font-sans group relative"
+                      className="text-gray-600 hover:text-primary transition-colors duration-300 text-sm font-sans group relative"
                     >
                       <span className="relative">
                         {item.label}
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
+                        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
                       </span>
                     </a>
                   </li>
@@ -148,23 +148,23 @@ const Footer = () => {
           <div className="flex items-center gap-4 md:gap-6">
             <a
               href="/admin/login"
-              className="text-sm text-gray-600 hover:text-green-600 transition-colors font-sans font-bold group relative"
+              className="text-sm text-gray-600 hover:text-primary transition-colors font-sans font-bold group relative"
             >
               <span className="relative">
                 Login as Admin
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
               </span>
             </a>
 
             <span className="hidden md:block text-gray-200">|</span>
 
             <a
-              href="#privacy"
-              className="text-sm text-gray-600 hover:text-green-600 transition-colors font-sans font-bold group relative"
+              href="/privacy"
+              className="text-sm text-gray-600 hover:text-primary transition-colors font-sans font-bold group relative"
             >
               <span className="relative">
                 Privacy
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-600 group-hover:w-full transition-all duration-300"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
               </span>
             </a>
           </div>
@@ -178,8 +178,8 @@ const Footer = () => {
           transition={{ delay: 0.2 }}
           className="mt-12 text-center"
         >
-          <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-6 py-3 font-sans">
-            <Shield className="w-4 h-4 text-green-600" />
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-lg border border-white/30 rounded-full px-6 py-3 font-sans">
+            <Shield className="w-4 h-4 text-primary" />
             <span className="text-sm text-gray-700">
               Secure payments via <span className="font-bold">Paystack</span>
             </span>

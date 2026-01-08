@@ -2,7 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 const Card = ({ children, className = '', onClick, hover = false, noBorder = false }) => {
-  const baseStyles = `bg-white rounded-[32px] p-6 ${noBorder ? '' : 'border-2 border-text/20'}`
+  const baseStyles = `bg-white/20 backdrop-blur-lg rounded-[32px] p-6 ${noBorder ? '' : 'border border-white/30'} shadow-lg`
   
   const Component = onClick || hover ? motion.div : 'div'
   const motionProps = onClick || hover ? {
